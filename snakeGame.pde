@@ -54,8 +54,8 @@ void readN(){
     }
 }
 int getColor(int i,int c){
-    int[] red={255,255,255,255};
-    int[] green={0,10,255,255};
+    int[] red={255,255,0,255};
+    int[] green={0,10,0,255};
     int[] blue={0,100,255,0};
     switch(c){
         case 1:
