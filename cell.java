@@ -1,6 +1,6 @@
 
 public class cell{
-    static private int cellSize=10;
+    static private int cellSize=20;
     static int Width;
     static int Height;
     private int x;

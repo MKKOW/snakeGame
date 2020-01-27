@@ -10,7 +10,7 @@ int Width=displayWidth;
 int Height=displayHeight;
 snake[] s;
 Food[] food;
-int state=0;
+int state=-1;
 String buffer="";
 int n=0;
 int isArduino=0;
@@ -77,6 +77,8 @@ void setup(){
     food=new Food[foodCount];
     for(int i=0; i<foodCount;i++)
         food[i]=new Food(rand.nextInt(Width-10),rand.nextInt(Height-10));
+    n=4;
+    makeSnakes();   
 
 }
 void setupArduino(){
@@ -200,8 +202,38 @@ void readCOMPort(){
     }
     text(disText+"\n"+(tmp!=-1?buffer:""),100,100);
 }
+void titleScreen(){
+      runGame();
+      int offset=160;
+     if(ButtonDelay<=0){
+      for(int i=0;i<n;i++){
+          Direction[i]=rand.nextInt(3)+1;
+      }
+      ButtonDelay=offset;
+      }
+      if(ButtonDelay!=0){
+        if(Delay!=0)
+            ButtonDelay-=Delay;
+        else
+            ButtonDelay-=10;
+    }
+    PFont titleFont=createFont("DSEG7Classic-Regular.ttf",200);
+      
+      textSize(100);
+      textFont(titleFont);
+      fill(255,255,255);
+      textAlign(CENTER,CENTER);
+      text("5na4e",Width/2,Height/2-100);
+      textFont(createFont(PFont.list()[0],50));
+      text("A Multiplayer Snake Game by M. Kowalski\nPress ENTER to continue",Width/2,Height/2+100);
+      textAlign(LEFT,BOTTOM);
+      textFont(createFont(PFont.list()[0],20));
+}
 void draw(){
   switch(state){
+      case -1:
+        titleScreen();
+        break;
       case 0:
         readN();
         break;
@@ -224,8 +256,18 @@ void draw(){
 void keyPressed(){
         
         switch(state){
+        case -1:
+              if (key==ENTER||key==RETURN){
+                   state++;
+                   for(int i=0;i<n;i++)
+                       s[i]=null;
+                   s=null;
+                   n=0;
+                   delay(1000);
+              }
+              break;
         case 0:
-             if (key==ENTER||key==RETURN){
+             if (buffer!=""&&(key==ENTER||key==RETURN)){
                    state++;
                    n=Integer.parseInt(buffer);
                    buffer="";
@@ -240,7 +282,7 @@ void keyPressed(){
              }
              break;
         case 1:
-              if (key==ENTER||key==RETURN){
+              if (buffer!=""&&(key==ENTER||key==RETURN)){
                    state++;
                    isArduino=Integer.parseInt(buffer);
                    buffer="";
@@ -258,7 +300,7 @@ void keyPressed(){
           state++;
         }
         else{
-        if (key==ENTER||key==RETURN){
+        if (buffer!=""&&(key==ENTER||key==RETURN)){
                    state++;
                    COMport=Integer.parseInt(buffer);
                    buffer="";
